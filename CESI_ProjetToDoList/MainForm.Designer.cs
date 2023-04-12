@@ -114,7 +114,6 @@
 
         private DataGridView tasksDataGridView;
         private TextBox taskNameTextBox;
-        private CheckBox checkBox1;
         private DateTimePicker TimeTaskDatePicker;
         private Button addButton;
         private Button deleteButton;

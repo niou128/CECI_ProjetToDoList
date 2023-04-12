@@ -1,7 +1,6 @@
 
 using System.ComponentModel;
 using System.Data;
-using System.Data.Common;
 using System.Timers;
 using Timer = System.Timers.Timer;
 
@@ -108,10 +107,10 @@ namespace CESI_ProjetToDoList
                 column.DefaultCellStyle.SelectionBackColor = column.DefaultCellStyle.BackColor;
                 column.DefaultCellStyle.SelectionForeColor = column.DefaultCellStyle.ForeColor;
                 // Rendre les colonnes non 'IsCompleted' en lecture seule
-                if (column.Name != "IsCompleted")
-                {
-                    column.ReadOnly = true;
-                }
+                //if (column.Name != "IsCompleted")
+                //{
+                //    column.ReadOnly = true;
+                //}
             }
 
             for (int i = 0; i < tasksDataGridView.Rows.Count; i++)

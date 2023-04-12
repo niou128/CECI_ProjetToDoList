@@ -13,11 +13,9 @@ namespace CESI_ProjetToDoList
 
         public void InitializeDatabase()
         {
-            using (var context = new ToDoListContext())
-            {
-                // Crée la base de données si elle n'existe pas
-                context.Database.EnsureCreated();
-            }
+            using var context = new ToDoListContext();
+            // Crée la base de données si elle n'existe pas
+            context.Database.EnsureCreated();
         }
 
         public List<Task> GetAllTasks()
