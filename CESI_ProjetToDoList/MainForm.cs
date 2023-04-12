@@ -87,6 +87,10 @@ namespace CESI_ProjetToDoList
                     tasksDataGridView.Rows.RemoveAt(tasksDataGridView.SelectedRows[0].Index);
                 }
             }
+            else
+            {
+                MessageBox.Show("Vous devez sélectionner une ligne", "suppression", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void LoadTasks()
