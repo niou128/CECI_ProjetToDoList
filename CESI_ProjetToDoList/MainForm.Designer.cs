@@ -32,6 +32,7 @@
             taskNameTextBox = new TextBox();
             TimeTaskDatePicker = new DateTimePicker();
             addButton = new Button();
+            deleteButton = new Button();
             ((System.ComponentModel.ISupportInitialize)tasksDataGridView).BeginInit();
             SuspendLayout();
             // 
@@ -41,54 +42,66 @@
             tasksDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             tasksDataGridView.BackgroundColor = SystemColors.InactiveCaption;
             tasksDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            tasksDataGridView.Location = new Point(25, 11);
-            tasksDataGridView.Margin = new Padding(3, 2, 3, 2);
-            tasksDataGridView.MultiSelect = false;
+            tasksDataGridView.Location = new Point(54, 27);
+            tasksDataGridView.Margin = new Padding(6, 5, 6, 5);
             tasksDataGridView.Name = "tasksDataGridView";
             tasksDataGridView.RowHeadersWidth = 51;
             tasksDataGridView.RowTemplate.Height = 29;
-            tasksDataGridView.Size = new Size(646, 217);
+            tasksDataGridView.Size = new Size(1384, 535);
             tasksDataGridView.TabIndex = 0;
-            tasksDataGridView.CellContentClick += TasksDataGridView_CellContentClick;
+            tasksDataGridView.CellClick += TasksDataGridView_CellClick;
             tasksDataGridView.DataBindingComplete += TasksDataGridView_DataBindingComplete;
             // 
             // taskNameTextBox
             // 
-            taskNameTextBox.Location = new Point(25, 267);
-            taskNameTextBox.Margin = new Padding(3, 2, 3, 2);
+            taskNameTextBox.Location = new Point(54, 659);
+            taskNameTextBox.Margin = new Padding(6, 5, 6, 5);
             taskNameTextBox.Name = "taskNameTextBox";
-            taskNameTextBox.Size = new Size(88, 23);
+            taskNameTextBox.Size = new Size(184, 43);
             taskNameTextBox.TabIndex = 1;
             // 
             // TimeTaskDatePicker
             // 
             TimeTaskDatePicker.CustomFormat = "dd/MM/yyyy HH:mm";
             TimeTaskDatePicker.Format = DateTimePickerFormat.Custom;
-            TimeTaskDatePicker.Location = new Point(137, 267);
+            TimeTaskDatePicker.Location = new Point(294, 659);
+            TimeTaskDatePicker.Margin = new Padding(6, 7, 6, 7);
             TimeTaskDatePicker.Name = "TimeTaskDatePicker";
-            TimeTaskDatePicker.Size = new Size(200, 23);
+            TimeTaskDatePicker.Size = new Size(424, 43);
             TimeTaskDatePicker.TabIndex = 3;
             // 
             // addButton
             // 
-            addButton.Location = new Point(386, 266);
+            addButton.Location = new Point(827, 656);
+            addButton.Margin = new Padding(6, 7, 6, 7);
             addButton.Name = "addButton";
-            addButton.Size = new Size(75, 23);
+            addButton.Size = new Size(161, 57);
             addButton.TabIndex = 4;
             addButton.Text = "Ajouter";
             addButton.UseVisualStyleBackColor = true;
             addButton.Click += addButton_Click;
             // 
+            // deleteButton
+            // 
+            deleteButton.Location = new Point(1149, 661);
+            deleteButton.Name = "deleteButton";
+            deleteButton.Size = new Size(169, 52);
+            deleteButton.TabIndex = 5;
+            deleteButton.Text = "supprimer";
+            deleteButton.UseVisualStyleBackColor = true;
+            deleteButton.Click += deleteButton_Click;
+            // 
             // MainForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(15F, 37F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(700, 338);
+            ClientSize = new Size(1500, 834);
+            Controls.Add(deleteButton);
             Controls.Add(addButton);
             Controls.Add(TimeTaskDatePicker);
             Controls.Add(taskNameTextBox);
             Controls.Add(tasksDataGridView);
-            Margin = new Padding(3, 2, 3, 2);
+            Margin = new Padding(6, 5, 6, 5);
             Name = "MainForm";
             Text = "ToDoList";
             Load += MainForm_Load;
@@ -104,5 +117,6 @@
         private CheckBox checkBox1;
         private DateTimePicker TimeTaskDatePicker;
         private Button addButton;
+        private Button deleteButton;
     }
 }

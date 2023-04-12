@@ -1,6 +1,7 @@
 
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using System.Timers;
 using Timer = System.Timers.Timer;
 
@@ -67,14 +68,26 @@ namespace CESI_ProjetToDoList
 
         private void deleteButton_Click(object sender, EventArgs e)
         {
-            //var selectedTask = tasksDataGridView.SelectedRows[0].DataBoundItem as Task;
+            if (tasksDataGridView.SelectedRows.Count > 0)
+            {
+                // Récupérez la DataRow correspondant à la ligne sélectionnée
+                DataRowView dataRowView = (DataRowView)tasksDataGridView.SelectedRows[0].DataBoundItem;
+                DataRow dataRow = dataRowView.Row;
 
-            //if (selectedTask != null)
-            //{
-            //    toDoListContext.Tasks.Remove(selectedTask);
-            //    toDoListContext.SaveChanges();
-            //    LoadTasks();
-            //}
+                // Récupérez l'ID de la tâche à partir de la DataRow
+                int taskId = (int)dataRow["Id"];
+
+                DialogResult dialogResult = MessageBox.Show($"Etes-vous sur de vouloir supprimer la tache {taskId}", "Suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (dialogResult == DialogResult.Yes)
+                {
+                    // Supprimez la tâche de la base de données en utilisant l'ID
+                    toDoListContext.DeleteTask(taskId);
+
+                    // Supprimez la ligne sélectionnée de la DataGridView
+                    tasksDataGridView.Rows.RemoveAt(tasksDataGridView.SelectedRows[0].Index);
+                }
+            }
         }
 
         private void LoadTasks()
@@ -89,10 +102,16 @@ namespace CESI_ProjetToDoList
             DateTime now = DateTime.Now;
             TimeSpan oneHour = TimeSpan.FromHours(1);
 
-            // Désactivez la couleur de fond par défaut pour les cellules sélectionnées
+            // Désactivez la couleur de fond et la couleur du texte pour les cellules sélectionnées
             foreach (DataGridViewColumn column in tasksDataGridView.Columns)
             {
                 column.DefaultCellStyle.SelectionBackColor = column.DefaultCellStyle.BackColor;
+                column.DefaultCellStyle.SelectionForeColor = column.DefaultCellStyle.ForeColor;
+                // Rendre les colonnes non 'IsCompleted' en lecture seule
+                if (column.Name != "IsCompleted")
+                {
+                    column.ReadOnly = true;
+                }
             }
 
             for (int i = 0; i < tasksDataGridView.Rows.Count; i++)
@@ -137,34 +156,39 @@ namespace CESI_ProjetToDoList
             return table;
         }
 
-        private void TasksDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void TasksDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Vérifiez si la cellule cliquée est dans la colonne 'IsCompleted'
-            if (tasksDataGridView.Columns[e.ColumnIndex].Name == "IsCompleted")
+            // Vérifiez que l'index de la colonne et de la ligne sont valides
+            if (e.ColumnIndex >= 0 && e.RowIndex >= 0)
             {
-                // Obtenez la tâche correspondante à la ligne
-                int taskId = (int)tasksDataGridView.Rows[e.RowIndex].Cells["Id"].Value;
-                Task task = toDoListContext.GetTaskById(taskId);
-
-                // Mettez à jour l'état 'IsCompleted' et sauvegardez les modifications dans la base de données
-                task.IsCompleted = !task.IsCompleted;
-                tasksDataGridView.Rows[e.RowIndex].Cells["IsCompleted"].Value = task.IsCompleted;
-                toDoListContext.UpdateTask(task);
-
-                // Changez la couleur de la ligne en fonction de l'état 'IsCompleted'
-                if (task.IsCompleted)
+                // Vérifiez si la cellule cliquée est dans la colonne 'IsCompleted'
+                if (tasksDataGridView.Columns[e.ColumnIndex].Name == "IsCompleted")
                 {
-                    tasksDataGridView.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Green;
-                }
-                else
-                {
-                    tasksDataGridView.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.White;
-                }
+                    // Récupérez la DataRow correspondant à la ligne cliquée
+                    DataRowView dataRowView = (DataRowView)tasksDataGridView.Rows[e.RowIndex].DataBoundItem;
+                    DataRow dataRow = dataRowView.Row;
 
-                // Validez les modifications de la cellule et rafraîchissez la DataGridView
-                tasksDataGridView.EndEdit();
-                tasksDataGridView.Refresh();
+                    // Récupérez l'ID de la tâche à partir de la DataRow
+                    int taskId = (int)dataRow["Id"];
+
+                    // Récupérez la tâche à partir de la base de données en utilisant l'ID
+                    Task task = toDoListContext.GetTaskById(taskId);
+
+                    // Inversez la propriété IsCompleted de la tâche
+                    task.IsCompleted = !task.IsCompleted;
+
+                    // Mettez à jour la tâche dans la base de données
+                    toDoListContext.UpdateTask(task);
+
+                    // Changez la couleur de la ligne en fonction de l'état 'IsCompleted'
+                    tasksDataGridView.Rows[e.RowIndex].DefaultCellStyle.BackColor = task.IsCompleted ? Color.Green : Color.White;
+
+                    // Validez les modifications de la cellule et rafraîchissez la DataGridView
+                    tasksDataGridView.EndEdit();
+                    tasksDataGridView.Refresh();
+                }
             }
         }
+
     }
 }

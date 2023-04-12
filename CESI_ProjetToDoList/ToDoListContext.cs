@@ -120,5 +120,21 @@ namespace CESI_ProjetToDoList
 
             return null;
         }
+
+        public void DeleteTask(int id)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(connectionString))
+            {
+                conn.Open();
+                string query = "DELETE FROM Tasks WHERE Id = @Id";
+                using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Id", id);
+                    cmd.ExecuteNonQuery();
+                }
+                conn.Close();
+            }
+        }
+
     }
 }
